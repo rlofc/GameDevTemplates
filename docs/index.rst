@@ -13,10 +13,10 @@ development toolkit written mostly as a set of generic modern C++ templates.
 Built for freedom
 ~~~~~~~~~~~~~~~~~
 
-GDT was designed to allow easy switching between different libraries for 
+GDT is designed to allow easy switching between different libraries for 
 graphics, audio physics and other game backends.
 While still being work-in-progress, GDT currently supports GLFW or SDL, OpenGL,
-OpenAL and Bullet physics. Vulkan and Newton support is coming soon, followed
+OpenAL and Bullet, physics. Vulkan and Newton support is coming soon, followed
 by the yet to be chosen network backends.
 
 Here's how you specify a GDT application with a set of changable backends:
@@ -34,7 +34,7 @@ Here's how you specify a GDT application with a set of changable backends:
 
 
 Soon you would be able to change this set completely,
-**without changing other parts of your game code**:
+**without changing other parts of your game code**.
 
 
 Built for coding
@@ -56,14 +56,14 @@ everything is visible and controllable:
                            die;
     };
 
-We also try to prefer structuring things in compilation time rather than runtime.
+GDT also prefers structuring things in compile time rather than runtime.
 This is done through using templates, static polymorphism, CRTP and other nasty
 tricks. The general idea is that it's faster to parse through a compiler's error
 message (even ones involving templates) than debugging a misbehavior in runtime.
 
 Built for tomorrow
 ~~~~~~~~~~~~~~~~~~
-GDT is using modern C++, applying smart techniques where it makes sense,
+GDT is using modern C++, applying smart (cough, arsed, cough..) techniques where it makes sense,
 while holding back from over-using the language where it isn't.
 
 Built for you
