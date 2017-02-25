@@ -1,0 +1,16 @@
+﻿---
+BasedOnStyle: Google
+AllowShortFunctionsOnASingleLine: None
+AlwaysBreakTemplateDeclarations: 'true'
+BinPackArguments: 'true'
+BinPackParameters: 'true'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+Cpp11BracedListStyle: 'true'
+ExperimentalAutoDetectBinPacking: 'true'
+Standard: Cpp11
+IndentWidth: '4'
+AccessModifierOffset: '-2'
+UseTab: Never
+BreakBeforeBraces: 'Stroustrup'
+ColumnLimit: 96
+...
