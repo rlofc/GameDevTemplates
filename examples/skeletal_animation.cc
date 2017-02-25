@@ -18,9 +18,11 @@
 #include "backends/opengl/opengl.hh"
 
 using my_app = gdt::application<gdt::platform::sdl::backend_for_opengl,
-                                 gdt::graphics::opengl::backend,
-                                 gdt::no_audio,
-                                 gdt::no_physics, gdt::no_networking, gdt::context>;
+                                gdt::graphics::opengl::backend,
+                                gdt::no_audio,
+                                gdt::no_physics,
+                                gdt::no_networking,
+                                gdt::context>;
 
 
 /* Our rendering pipeline is going to be a forward rendering pipeline with
@@ -65,7 +67,7 @@ class imrod : public my_app::asset<imrod>,
      *   * Construct the animation object with our animation sequence for this example.
      */
     imrod(const my_app::context& ctx)
-        : my_app::drawable< imrod>(ctx, "res/examples/imrod.smd"),
+        : my_app::drawable<imrod>(ctx, "res/examples/imrod.smd"),
           my_app::animatable<imrod>(gdt::read_skeleton("res/examples/imrod.smd")),
           _diffuse_map(ctx, "res/examples/imrod.png"),
           _normal_map(ctx, "res/examples/imrod_nm.png"),
@@ -103,7 +105,7 @@ class imrod_scene : public my_app::scene {
     gdt::driven<gdt::instance<imrod>, gdt::direct_driver> _imrod;
     /* We also set up our `_camera`, again as a driven instance, but this time
      * using gdt::hover_driver to allow the camera to move freely in 3D using
-     * standard camera control semantics (pan, track, dolly, etc..)
+     * standard camera controls (pan, track, dolly, etc..)
      */
     gdt::driven<gdt::instance<gdt::camera>, gdt::hover_driver> _camera;
     /* Instead of controlling the camera through code, we'll allow the user
@@ -118,9 +120,9 @@ class imrod_scene : public my_app::scene {
     gdt::math::vec3 _light_direction = {-0.7, 0.5, 0.9};
 
   public:
-    /* Note how the constructure initializes both `_imrod` and `_camera`
-     * using a driver initializator - a special function object designed to
-     * provide initializers for the drivers instantiated by gdt::driven.
+    /* Note how the constructor initializes both `_imrod` and `_camera`
+     * using their drivers initializator - a function object designed to
+     * generate initializers for the drivers.
      */
     imrod_scene(const my_app::context& ctx, gdt::screen* screen) : 
           _imrod(ctx, gdt::pos::origin),
@@ -134,6 +136,7 @@ class imrod_scene : public my_app::scene {
 
     /* Updating
      * ~~~~~~~~
+     *
      * Update is called on every frame and this is where you 
      * would usually begin running your own scene logic,
      * as well as call other update methods for assets, controllers or other
