@@ -85,6 +85,20 @@ For example, here's how you will set up a deferred rendering pass in GDT:
         .draw(_zombie)
         .draw(_hero);
 
+Screenshots
+-----------
+
+skeletal_animation.cc
+~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: https://raw.githubusercontent.com/rlofc/rlofc.github.com/master/gdt/gifs/imrod.gif
+    :align: center
+
+physics_instancing.cc
+~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: https://raw.githubusercontent.com/rlofc/rlofc.github.com/master/gdt/gifs/bullet.gif
+    :align: center
 
 Call for help
 -------------
