@@ -187,10 +187,6 @@ class imrod_scene : public my_app::scene {
     void imgui(const my_app::context& ctx) override
     {
         _camera.entity_ptr()->imgui();
-        ImGui::InputFloat4("x",&_camera.get_transformable_ptr()->get_transform_ptr(0)->xx);
-        ImGui::InputFloat4("y",&_camera.get_transformable_ptr()->get_transform_ptr(0)->yx);
-        ImGui::InputFloat4("z",&_camera.get_transformable_ptr()->get_transform_ptr(0)->zx);
-        ImGui::InputFloat4("w",&_camera.get_transformable_ptr()->get_transform_ptr(0)->wx);
         if (ImGui::CollapsingHeader("shader")) {
             ImGui::SliderFloat("Ambient", &_ambient_light, 0.0f, 1.0f);
             ImGui::SliderFloat3("Light Direction", &_light_direction.x, -1.0f, 1.0f);
