@@ -18,7 +18,11 @@ namespace gdt {
 struct skeleton;
 
 /**
- * TODO: document this
+ * A frame holds a single keyframe worth of data in a sequence of
+ * skeletal animation keyframes.
+ * Frames hold bone information for the full set of bones in a skeleton.
+ * Frames have to be "baked" before they can be used in the rendering pipeline.
+ * Baking will convert the raw bones data into bone transformation matrices.
  */
 struct frame {
     std::vector<int> bone_parents;
@@ -58,7 +62,8 @@ struct frame {
 };
 
 /**
- * TODO: document this
+ * The bone structure holds the name and parent id of a single bone in a
+ * skeleton.
  */
 struct bone {
     std::string name;
@@ -71,7 +76,8 @@ struct bone {
 };
 
 /**
- * TODO: document this
+ *  The skeleton stores an array of bones for a single skeleton,
+ *  and a single frame holding the skeleton rest pose.
  */
 struct skeleton {
     std::vector<bone> bones;
@@ -83,7 +89,13 @@ struct skeleton {
 };
 
 /**
- * TODO: document this
+ * An animation contains a set of key frames for a single, playable animation
+ * of a skeletal model. 
+ * You will usually have several instances of animation for a model (stand,
+ * walk, run, jump, etc..)
+ * While you can use the animation objects directly, you will usually tag
+ * your asset object as `animatable` and use the method gdt::animatable::play
+ * to play an animation object through gdt::animixer.
  */
 class animation {
   private:
@@ -152,7 +164,8 @@ class animation {
 };
 
 /**
- * TODO: document this
+ * An animixer is an animation mixer that allows smooth transitioning
+ * between different animations.
  */
 class animixer {
     skeleton _skeleton;

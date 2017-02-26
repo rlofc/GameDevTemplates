@@ -94,23 +94,48 @@ class application {
     using graphics = GRAPHICS<platform>;
 
     /**
-     * A derivable gdt::asset template you can use to create your own
-     *
-     * For example:
-     *
-     *     class zombie : public my_game::asset<zombie> {
-     *       public:
-     *         zombie(const my_game::context & ctx):
-     *           my_game::asset<zombie>(ctx, "res/zombie.smd") {}
-     *     };
-     *
+     * A gdt::asset CRTP template you can use to subclass your own assets.
+     * You will normally have additional traits set for your assets.
      */
     template <typename ACTUAL_ASSET>
     using asset = gdt::asset<ACTUAL_ASSET>;
 
+    /**
+     * A gdt::drawable CRTP template you subclass to create your own drawable
+     * assets:
+     *
+     *     class zombie : public my_game::asset<zombie>,
+     *                    public my_game::drawable<zombie> {
+     *       public:
+     *         zombie(const my_game::context & ctx):
+     *           my_game::drawable<zombie>(ctx, "res/zombie.smd") {}
+     *     };
+     *
+     * Drawable assets can be used as arguments in pipeline `draw` calls:
+     *
+     *     _pipeline.use(ctx)
+     *         .draw(_zombie);
+     */
     template <typename ACTUAL_ASSET>
     using drawable = gdt::drawable<GRAPHICS<platform>, ACTUAL_ASSET>;
 
+    /**
+     * A gdt::animatable CRTP template you can subclass to set up skeletal
+     * animation support for an asset:
+     *
+     *     class zombie : public my_game::asset<zombie>,
+     *                    public my_game::drawable<zombie>,
+     *                    public my_game::animatable<zombie> {
+     *       public:
+     *         zombie(const my_game::context & ctx):
+     *           my_game::drawable<zombie>(ctx, "res/zombie.smd"),
+     *           my_game::animatable<zombie>(gdt::read_skeleton("res/zombie.smd")) {}
+     *     };
+     *
+     * You can then play animation objects through the gdt::animatable::play
+     * and have the model animated using one of the pipelies supporting
+     * skeletal animations (for example, gdt::rigged_pipeline).
+     */
     template <typename ACTUAL_ASSET>
     using animatable = gdt::animatable<ACTUAL_ASSET>;
 
