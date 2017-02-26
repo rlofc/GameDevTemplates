@@ -74,7 +74,7 @@ Game developers should be able to read their code easily, without parsing
 through forced and obscured code constructs. GDT tries to follow this guideline
 as much as possible.
 
-For example, here's how you will set up a deferred rendering pass in GDT:
+For example, here's how you use a shader pipeline to render stuff:
 
 ::
     
