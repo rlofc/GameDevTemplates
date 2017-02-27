@@ -170,17 +170,27 @@ class application {
     using text = gdt::text<graphics>;
 
     /**
-     * A read-to-use gdt::pipeline_proxy, used to ensure proper pipeline usage.
+     * A partly specified gdt::pipeline_proxy template, used to ensure proper pipeline usage.
+     *
+     * @tparam PIPELINE pipeline type to wrap with the proxy. You will pass
+     * the actual object in the constructor of the proxy.
      */
-    template <typename S>
-    using pipeline_proxy = gdt::pipeline_proxy<graphics, S>;
+    template <typename PIPELINE>
+    using pipeline_proxy = gdt::pipeline_proxy<graphics, PIPELINE>;
 
     /**
-     * A ready to use pipeline type for you to subclass from when you want
+     * A partly specified pipeline CRTP template for you to subclass from when you want
      * to create your own vertex and fragment shaders pipeline.
+     *
+     *     class my_pipeline: public my_game::pipeline<my_pipeline> {
+     *         ...
+     *     };
+     *
+     * @tparam PIPELINE your pipeline class, subclassing from this template.
+     *
      */
-    template <typename S>
-    using pipeline = gdt::pipeline<graphics, S>;
+    template <typename PIPELINE>
+    using pipeline = gdt::pipeline<graphics, PIPELINE>;
 
     /**
      * Forward rendering shaders pipeline.
@@ -233,14 +243,12 @@ class application {
     using material = gdt::material<graphics>;
 
     /**
-     * TODO: document this
-     *
+     * A specified and ready to use render pass.
      */
     using render_pass = gdt::render_pass<graphics>;
 
     /**
-     * TODO: document this
-     *
+     * A partly specified CRTP renderer template for you to subclass from.
      */
     template <typename RENDERER>
     using renderer = gdt::renderer<graphics, RENDERER>;
