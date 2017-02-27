@@ -150,6 +150,27 @@ class references : public transforms<C>,
     }
 };
 
+/**
+ * gdt::instances is a special template container for gdt::is_entity types such
+ * as gdt::asset and gdt::camera. By default, gdt::is_entity types doesn't have
+ * any 3D world transformation data. gdt::instances augment entities with 3D
+ * transformation and can also support graphical instancing of entities during
+ * rendering.
+ *
+ * An instances object will manage a set of 3D transformation gdt::math::mat4
+ * instances and a single object of your entity type.
+ *
+ * You will almost always have to use gdt::instances or gdt::instance (and their
+ * related siblings, gdt::references and gdt::reference) to store your asset type:
+ *
+ *     gdt::instances<zombie, 1000> _my_army_of_zombies;
+ *     gdt::instance<hero> _my_single_hero;
+ *
+ * When constructing an instances object, you will also get the opportunity to
+ * construct your entity object by passing its constructor paramters from the
+ * third argument onwards. See gdt::instances::instances for an example.
+ *
+ */
 template <typename T, int C = 1>
 class instances : public transforms<C>,
                   public container<T>,
@@ -158,6 +179,22 @@ class instances : public transforms<C>,
                   public may_have_animatable<T, instances<T, C>>,
                   public may_have_collidable<T, instances<T, C>> {
   public:
+    /**
+     * Constructing an instances object involves setting the instances
+     * preliminary transformation and then constructing the contained entity
+     * object:
+     *
+     *     class my_scene : public my_game::scene {
+     *       private:
+     *         gdt::instance<hero> _my_hero;
+     *    
+     *       public:
+     *         my_scene(...) : _my_hero(ctx, gdt::pos::origin, "my hero name")
+     *         {
+     *         }
+     *     };
+     *
+     */
     template <typename CONTEXT, typename... ARG>
     instances(const CONTEXT &ctx, std::function<math::mat4(int)> pos_callback =
                                       [](int j) {
