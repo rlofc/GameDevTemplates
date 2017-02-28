@@ -43,9 +43,7 @@ template <typename BACKEND>
 class bare_asset : public asset_impl<BACKEND>,
                  public is_entity<bare_asset<BACKEND>>,
                  public is_drivable<bare_asset<BACKEND>>,
-                 public is_drawable<bare_asset<BACKEND>>,
-                 public is_non_animatable<bare_asset<BACKEND>>,
-                 public is_non_collidable {
+                 public is_drawable<bare_asset<BACKEND>> {
   public:
     bare_asset(const graphics_context<BACKEND> &ctx, std::string filename,
              std::function<std::unique_ptr<model>(const char *filename)> loader = read_smd)

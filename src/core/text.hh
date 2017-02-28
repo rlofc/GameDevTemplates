@@ -13,9 +13,7 @@ template <typename GRAPHICS>
 class text : public GRAPHICS::text,
     public is_entity<text<GRAPHICS>>,
     public is_drivable<text<GRAPHICS>>,
-    public is_drawable<text<GRAPHICS>>,
-    public is_non_animatable<text<GRAPHICS>>,
-    public is_non_collidable
+    public is_drawable<text<GRAPHICS>>
 {
     public:
         text(const graphics_context<GRAPHICS>& ctx, const font<GRAPHICS>& f, const char* text) :

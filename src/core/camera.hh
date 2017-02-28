@@ -23,10 +23,7 @@ struct pov {
 class camera : public pov,
                private screen::subscriber,
                public is_entity<camera>,
-               public is_drivable<camera>,
-               public is_non_drawable<camera>,
-               public is_non_animatable<camera>,
-               public is_non_collidable {
+               public is_drivable<camera> {
   public:
     template <typename CONTEXT>
     camera(const CONTEXT& ctx, screen* screen, float fov = 0.28f, float near = 0.1,
