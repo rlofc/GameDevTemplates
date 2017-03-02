@@ -9,6 +9,7 @@
 #include <vector>
 #include <cmath>
 
+#include "traits.hh"
 #include "math.hh"
 #include "context.hh"
 #include "logger.hh"
@@ -246,6 +247,23 @@ class animixer {
         s.bind_duals(quat_duals, _skeleton.n_bones());
     }
 };
+
+template <typename ACTUAL>
+class animatable : public animixer, public is_animatable<ACTUAL>
+{
+  public:
+    /**
+     * TODO
+     */
+    animatable(const skeleton& s)
+        : animixer(s)
+    {
+    }
+    virtual ~animatable()
+    {
+    }
+};
+
 }
 
 #endif  // src/core/animation_hh_INCLUDED

@@ -140,21 +140,6 @@ class application {
     using animatable = gdt::animatable<ACTUAL_ASSET>;
 
     /**
-     * A basic model asset you can use to compose your own more complex asset
-     * types.
-     *
-     * For example:
-     *
-     *     struct zombie {
-     *         my_game::model _model;
-     *         zombie(const my_game::context & ctx):
-     *           _model{ctx, "res/zombie.smd") {}
-     *     };
-     *
-     */
-    using model = gdt::bare_asset<GRAPHICS<platform>>;
-
-    /**
      * Image-based texture type you can feed into pipeline materials.
      */
     using texture = typename GRAPHICS<platform>::texture;

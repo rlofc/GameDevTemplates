@@ -326,5 +326,12 @@ struct may_have_transformable<
         return static_cast<ME *>(this)->content()->get_transformable_ptr();
     }
 };
+
+template <typename ACTUAL>
+class asset : public is_entity<ACTUAL>,
+              public is_drivable<ACTUAL>
+{
+};
+
 }
 #endif /* GDT_SRC_CORE_TRAITS_HH_INCLUDED */

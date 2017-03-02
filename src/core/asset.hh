@@ -14,119 +14,62 @@
 
 namespace gdt {
 
-template <typename BACKEND>
-class asset_impl {
+/**
+ * An drawable is an **almost** ready to draw 3D entity you load from a file, holding
+ * the required surface data you need to provide your rendering pipeline.
+ *
+ * Why almost?
+ *
+ * In GDT, a drawable object contains the 3D vertices information of a model, 
+ * without any material properties or texture map data. 
+ * These attributes are stored in gdt::material objects or being set directly
+ * using gdt::pipeline instances.
+ *
+ * Another part missing from gdt::drawable objects in the specific instance
+ * information about the position, rotation and scale of the model in
+ * the 3D world containing it. This information is being stored in
+ * the gdt::instance or gdt::instances template that can contain
+ * drawables or other type of GDT assets.
+ */
+template <typename GRAPHICS, typename ACTUAL>
+class drawable : public is_drawable<ACTUAL> {
   public:
-    asset_impl(
-        const graphics_context<BACKEND> &ctx, std::string filename,
-        std::function<std::unique_ptr<model>(const char *filename)> loader = read_smd);
-    virtual ~asset_impl();
+    /**
+     * Construct a drawable from the provided SMD model filename.
+     *
+     * @param ctx a graphics_context compatible context object
+     * @param filename full path to a valid SMD model
+     * @param loader file loader - SMD file loader by default
+     */
+    drawable(const graphics_context<GRAPHICS> &ctx, std::string filename,
+                std::function<std::unique_ptr<model>(const char *filename)> loader = read_smd);
+
+    virtual ~drawable();
 
     template <typename PIPELINE>
-    void draw_instances(const graphics_context<BACKEND> &ctx, const PIPELINE &s,
+    void draw_instances(const graphics_context<GRAPHICS> &ctx, const PIPELINE &s,
                         const typename PIPELINE::material &_material,
                         const math::mat4 *transforms, int count) const;
 
     template <typename PIPELINE>
-    void draw_instances(const graphics_context<BACKEND> &ctx, const PIPELINE &s,
+    void draw_instances(const graphics_context<GRAPHICS> &ctx, const PIPELINE &s,
                         const math::mat4 *transforms, int count) const;
 
     math::vec3 get_bounds() const;
 
   private:
     std::vector<std::unique_ptr<
-        gdt::blueprints::graphics::surface<BACKEND, typename BACKEND::surface>>>
+        gdt::blueprints::graphics::surface<GRAPHICS, typename GRAPHICS::surface>>>
         _surfaces;
 };
 
-template <typename BACKEND>
-class bare_asset : public asset_impl<BACKEND>,
-                 public is_entity<bare_asset<BACKEND>>,
-                 public is_drivable<bare_asset<BACKEND>>,
-                 public is_drawable<bare_asset<BACKEND>> {
-  public:
-    bare_asset(const graphics_context<BACKEND> &ctx, std::string filename,
-             std::function<std::unique_ptr<model>(const char *filename)> loader = read_smd)
-        : asset_impl<BACKEND>(ctx, filename, loader)
-    {
-    }
-    virtual ~bare_asset()
-    {
-    }
-};
-
-/**
- * An asset is an **almost** drawable 3D entity you load from a file, holding
- * the required surface data you need to provide your rendering pipeline.
- *
- * Why almost?
- *
- * In GDT, an asset object contains the 3D vertices information of a model, 
- * without any material properties or texture map data. 
- * These attributes are stored in gdt::material objects or being set directly
- * using gdt::pipeline instances.
- *
- * Another part missing from gdt::asset objects in the specific instance
- * information about the position, rotation and scale of the model in
- * the 3D world containing it. This information is being stored in
- * the gdt::instance or gdt::instances template that can contain
- * assets or other type of GDT entities.
- *
- */
-template <typename ACTUAL>
-class asset : public is_entity<ACTUAL>,
-              public is_drivable<ACTUAL>
-{
-};
-
-template <typename BACKEND,
-          typename ACTUAL>
-class drawable : public asset_impl<BACKEND>,
-    public is_drawable<ACTUAL> {
-  public:
-    /**
-     * Construct an asset from the provided SMD model filename.
-     *
-     * @param ctx a graphics_context compatible context object
-     * @param filename full path to a valid SMD model
-     * @param loader file loader - SMD file loader by default
-     */
-    drawable(const graphics_context<BACKEND> &ctx, std::string filename,
-                std::function<std::unique_ptr<model>(const char *filename)> loader = read_smd)
-        : asset_impl<BACKEND>(ctx, filename, loader)
-    {
-    }
-    virtual ~drawable()
-    {
-    }
-};
-
-
-template <typename ACTUAL>
-class animatable :
-    public animixer,
-                       public is_animatable<ACTUAL>
-{
-  public:
-    /**
-     * TODO
-     */
-    animatable(const skeleton& s)
-        : animixer(s)
-    {
-    }
-    virtual ~animatable()
-    {
-    }
-};
-
-template <typename BACKEND>
+template <typename GRAPHICS, typename ACTUAL>
 template <typename PIPELINE>
-void asset_impl<BACKEND>::draw_instances(const graphics_context<BACKEND> &ctx,
-                                            const PIPELINE &s,
-                                            const typename PIPELINE::material &_material,
-                                            const math::mat4 *transforms,
-                                            int count) const
+void drawable<GRAPHICS, ACTUAL>::draw_instances(const graphics_context<GRAPHICS> &ctx,
+                                        const PIPELINE &s,
+                                        const typename PIPELINE::material &_material,
+                                        const math::mat4 *transforms,
+                                        int count) const
 {
     _material.bind(ctx, s);
     for (const auto &surf : _surfaces) {
@@ -134,20 +77,20 @@ void asset_impl<BACKEND>::draw_instances(const graphics_context<BACKEND> &ctx,
     }
 }
 
-template <typename BACKEND>
+template <typename GRAPHICS, typename ACTUAL>
 template <typename PIPELINE>
-void asset_impl<BACKEND>::draw_instances(const graphics_context<BACKEND> &ctx,
-                                            const PIPELINE &s,
-                                            const math::mat4 *transforms,
-                                            int count) const
+void drawable<GRAPHICS, ACTUAL>::draw_instances(const graphics_context<GRAPHICS> &ctx,
+                                        const PIPELINE &s,
+                                        const math::mat4 *transforms,
+                                        int count) const
 {
     for (const auto &surf : _surfaces) {
         surf.get()->draw_instanced(*ctx.graphics, s, transforms, count);
     }
 }
 
-template <typename BACKEND>
-math::vec3 asset_impl<BACKEND>::get_bounds() const
+template <typename GRAPHICS, typename ACTUAL>
+math::vec3 drawable<GRAPHICS, ACTUAL>::get_bounds() const
 {
     float max_x, min_x, max_y, min_y, max_z, min_z;
     max_x = min_x = max_y = min_y = max_z = min_z = 0;
@@ -160,25 +103,26 @@ math::vec3 asset_impl<BACKEND>::get_bounds() const
         min_z = std::min(min_z, surf->min_v.x);
     }
     math::vec3 ret = math::vec3((max_x - min_x) / 2, (max_y - min_y) / 2, (max_z - min_z) / 2);
-    LOG_DEBUG << "asset bounds are " << ret;
+    LOG_DEBUG << "drawable bounds are " << ret;
     return ret;
 }
 
-template <typename BACKEND>
-asset_impl<BACKEND>::asset_impl(
-    const graphics_context<BACKEND> &ctx, std::string filename,
-    std::function<std::unique_ptr<model>(const char *filename)> loader)
+template <typename GRAPHICS, typename ACTUAL>
+drawable<GRAPHICS, ACTUAL>::drawable(const graphics_context<GRAPHICS> &ctx,
+                            std::string filename,
+                            std::function<std::unique_ptr<model>(const char *filename)> loader)
 {
     auto model = loader(filename.c_str());
     for (auto &m : model->meshes) {
-        auto s = std::make_unique<typename BACKEND::surface>(ctx, m.get());
+        auto s = std::make_unique<typename GRAPHICS::surface>(ctx, m.get());
         _surfaces.push_back(std::move(s));
     }
 }
 
-template <typename BACKEND>
-asset_impl<BACKEND>::~asset_impl()
+template <typename GRAPHICS, typename ACTUAL>
+drawable<GRAPHICS, ACTUAL>::~drawable()
 {
 }
+
 }
 #endif  // GDT_DRAWABLE_HEADER_INCLUDED
