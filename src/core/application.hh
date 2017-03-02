@@ -11,7 +11,7 @@
 #include "backends/blueprints/physics.hh"
 
 #include "core/camera.hh"
-#include "core/asset.hh"
+#include "core/drawable.hh"
 #include "core/drivers.hh"
 #include "core/font.hh"
 #include "core/renderer.hh"

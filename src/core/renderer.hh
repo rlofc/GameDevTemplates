@@ -1,7 +1,7 @@
 #ifndef GDT_RENDERER_HEADER_INCLUDED
 #define GDT_RENDERER_HEADER_INCLUDED
 
-#include "asset.hh"
+#include "drawable.hh"
 #include "light.hh"
 #include "shaders.hh"
 
