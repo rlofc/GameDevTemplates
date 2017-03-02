@@ -3,7 +3,7 @@
 
 #include "camera.hh"
 #include "context.hh"
-#include "instances.hh"
+#include "extensions.hh"
 #include "math.hh"
 #include "physics.hh"
 #include "backends/blueprints/platform.hh"

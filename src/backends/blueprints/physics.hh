@@ -1,7 +1,7 @@
 #ifndef GDT_PHYSICS_HEADER_INCLUDED
 #define GDT_PHYSICS_HEADER_INCLUDED
 
-#include "instances.hh"
+#include "extensions.hh"
 #include "math.hh"
 
 namespace gdt::blueprints::physics {

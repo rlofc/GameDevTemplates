@@ -3,7 +3,7 @@
 
 #include "core/application.hh"
 #include "core/drivers.hh"
-#include "core/instances.hh"
+#include "core/extensions.hh"
 #include "core/renderer.hh"
 #include "core/shaders.hh"
 #include "core/animation.hh"

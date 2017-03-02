@@ -2,7 +2,7 @@
 #define SRC_CONSTRUCTS_SHADERS_HH_INCLUDED
 
 #include "imgui/imgui.h"
-#include "instances.hh"
+#include "extensions.hh"
 #include "light.hh"
 #include "camera.hh"
 namespace gdt {
