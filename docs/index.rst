@@ -100,13 +100,13 @@ improvements. No contribution is too small!
    context
    scenes
    drawing
+   animation
+   audio
+   physics
    control
    shaders
    text
    renderers
-   animation
-   physics
-   audio
    blueprints
    debug
    example_empty_app

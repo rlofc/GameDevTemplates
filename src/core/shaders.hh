@@ -43,8 +43,15 @@ class pipeline_proxy {
     }
 };
 
+/**
+ * GDT standard material for gdt::drawable objects.
+ */
 template <typename GRAPHICS>
 struct material {
+    /**
+     * Constructs a new material using diffuse, normal and specular
+     * texture maps.
+     */
     material(const graphics_context<GRAPHICS>& ctx,
              const typename GRAPHICS::texture* d,
              const typename GRAPHICS::texture* n,
@@ -63,6 +70,16 @@ struct material {
     const typename GRAPHICS::texture* specular;
 };
 
+/**
+ * A pipeline is a combined set of GPU shaders (most frequently, a vertex
+ * shader and a fragment shader). You can use a pipeline to draw stuff onto
+ * a target buffer, usually the screen or another texture map.
+ *
+ * Creating a pipeline is a highly time-consuming operation. Make sure you
+ * create your pipelines in-advance. You would usually store your pre-created
+ * pipelines in your custom application context, or as members of your scene
+ * subclasses.
+ */
 template <typename GRAPHICS, typename T>
 class pipeline : public GRAPHICS::base_pipeline {
   public:
@@ -73,6 +90,11 @@ class pipeline : public GRAPHICS::base_pipeline {
     {
         return pipeline_proxy<GRAPHICS, T>(static_cast<const T&>(*this));
     }
+    /**
+     * You must call `use` before you start using the pipeline to draw.
+     * Calling `use` is a relatively expensive operation, so you would usually
+     * want to minimize your `use` calls per frame.
+     */
     const T & use(const graphics_context<GRAPHICS> & ctx) const {
         GRAPHICS::base_pipeline::use(ctx);
         return static_cast<const T&>(*this);
@@ -80,6 +102,24 @@ class pipeline : public GRAPHICS::base_pipeline {
     typedef pipeline_proxy<GRAPHICS, T> proxy;
 };
 
+/**
+ * The forward rendering pipeline supports standard forward rendering and supports
+ * a single directional light. Here's how a gdt::scene render method could look like
+ * using this pipeline:
+ *
+ *     void render(const my_app::context& ctx) override
+ *     {
+ *         my_app::render_pass(ctx)
+ *             .target(my_app::graphics::screen_buffer)
+ *             .clear({0, 0, 0, 1});
+ *
+ *         _pipeline.use(ctx)
+ *             .set_material(_zombie.get_drawable().get_material())
+ *             .set_camera(_camera)
+ *             .draw(_moon);
+ *     }
+ *
+ */
 template <typename GRAPHICS>
 class forward_pipeline : public pipeline<GRAPHICS, forward_pipeline<GRAPHICS>> {
   private:

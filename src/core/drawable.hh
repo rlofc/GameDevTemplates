@@ -15,7 +15,7 @@
 namespace gdt {
 
 /**
- * An drawable is an **almost** ready to draw 3D entity you load from a file, holding
+ * A drawable is an **almost** ready to draw 3D entity you load from a file, holding
  * the required surface data you need to provide your rendering pipeline.
  *
  * Why almost?
@@ -30,6 +30,28 @@ namespace gdt {
  * the 3D world containing it. This information is being stored in
  * the gdt::instance or gdt::instances template that can contain
  * drawables or other type of GDT assets.
+ *
+ * Here's how you can subclass gdt::drawable to create your own assets:
+ *
+ *     class zombie : public my_app::asset<zombie>,
+ *                    public my_app::drawable<zombie> {
+ *       public:
+ *         moon(const my_app::context& ctx):
+ *             my_app::drawable<zombie>(ctx, "res/zombie.smd") {}
+ *     };
+ *
+ *
+ * And here's how you could instantiate a drawable in your scene class:
+ *
+ *     gdt::instance<zombie> _zombie;
+ *     gdt::instances<zombie, 1000> _army_of_zombies;
+ *
+ * Now, if you want direct control over your drawable instances, you can
+ * use gdt::driven together with a gdt::direct_driver or other drivers
+ * to help you manipulate your instances transformations:
+ *
+ *     gdt::driven<gdt::instance<zombie>, gdt::direct_driver> _movable_zombie;
+ *
  */
 template <typename GRAPHICS, typename ACTUAL>
 class drawable : public is_drawable<ACTUAL> {

@@ -44,8 +44,13 @@ static std::function<math::mat4(int)> look_at(math::vec3 pos, math::vec3 tgt)
 }
 
 /**
- * represents one or more concrete entities - that is - entities
- * with a usable transformation matrix.
+ * gdt::transforms is an extension base template designed to augment
+ * entities with a 3D transformation matrix.
+ * This is not meant to be used directly but rather through one of its
+ * subclasses: gdt::instances or gdt::references (and their non-plural
+ * versions gdt::instance and gdt:reference).
+ *
+ * @tparam C number of transformation matrices to allocate and own.
  */
 template <int C = 1>
 class transforms : public is_transformable<transforms<C>> {
@@ -113,15 +118,9 @@ class transforms : public is_transformable<transforms<C>> {
     }
 
     template <typename CONTEXT>
-    void exp_update_instance_buffer(const CONTEXT &ctx)
-    {
-        ctx.graphics->update_instance_buffer(_transforms, C);
-    }
-
-    template <typename CONTEXT>
     void update(const CONTEXT &ctx)
     {
-        exp_update_instance_buffer(ctx);
+        ctx.graphics->update_instance_buffer(_transforms, C);
     }
 };
 
@@ -150,15 +149,18 @@ class references : public transforms<C>,
     }
 };
 
+template <typename T>
+using reference = references<T, 1>;
+
 /**
- * gdt::instances is a special template container for gdt::is_entity types such
- * as gdt::asset and gdt::camera. By default, gdt::is_entity types doesn't have
+ * gdt::instances is a special template container for gdt::is_entity types (such
+ * as gdt::asset and gdt::camera). By default, gdt::is_entity types doesn't have
  * any 3D world transformation data. gdt::instances augment entities with 3D
  * transformation and can also support graphical instancing of entities during
  * rendering.
  *
- * An instances object will manage a set of 3D transformation gdt::math::mat4
- * instances and a single object of your entity type.
+ * An instances object will manage a set of 3D transformations (gdt::math::mat4
+ * instances) and a single contained object of your entity type.
  *
  * You will almost always have to use gdt::instances or gdt::instance (and their
  * related siblings, gdt::references and gdt::reference) to store your asset type:
@@ -169,6 +171,9 @@ class references : public transforms<C>,
  * When constructing an instances object, you will also get the opportunity to
  * construct your entity object by passing its constructor paramters from the
  * third argument onwards. See gdt::instances::instances for an example.
+ *
+ * @tparam T your entity type
+ * @tparam C number of instances to own and manage transformations for.
  *
  */
 template <typename T, int C = 1>
@@ -214,9 +219,13 @@ class instances : public transforms<C>,
 template <typename T>
 using instance = instances<T, 1>;
 
-template <typename T>
-using reference = references<T, 1>;
-
+/**
+ * gdt::driven can extend any gdt::is_transformable by allocating one or more
+ * gdt::driver objects to manipulate one or more 3D transformation.
+ *
+ * @tparam T a valid gdt::is_transformable type.
+ * @tparam DRIVER a driver type to instantiate for each transformation of T.
+ */
 template <typename T, template <typename> typename DRIVER = no_driver>
 class driven : public container<T>,
                public may_have_drawable<T, driven<T, DRIVER>>,

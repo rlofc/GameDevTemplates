@@ -8,7 +8,18 @@
 namespace gdt::blueprints::audio {
 
 /**
- * Concrete sound objects should implement this interface.
+ * The basic sound type that audio backend should provide you with.
+ * When you specify an audio backend for your application type, you can
+ * declare your own sound objects through it:
+ *
+ *     class intro_scene: public my_app::scene {
+ *       private:
+ *         my_app::sound _game_theme;
+ *       public:
+ *         intro_scene(const my_app::context & ctx):
+ *             _game_theme(ctx, "res/audio/theme.ogg") {}
+ *     };
+ *
  */
 class sound {
   public:
