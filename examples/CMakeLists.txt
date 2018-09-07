@@ -63,17 +63,17 @@ add_custom_command(
       ${CMAKE_BINARY_DIR}/_docs/example_skeletal_animation.rst
       ${CMAKE_BINARY_DIR}/_docs/example_physics_instancing.rst
     COMMAND mkdir -p ${CMAKE_BINARY_DIR}/_docs/
-    COMMAND awk -f ${CMAKE_SOURCE_DIR}/literst.awk 
-      ${CMAKE_SOURCE_DIR}/examples/empty_app.cc 
+    COMMAND awk -f ${CMAKE_CURRENT_SOURCE_DIR}/literst.awk
+    ${CMAKE_CURRENT_SOURCE_DIR}/empty_app.cc 
       > ${CMAKE_BINARY_DIR}/_docs/example_empty_app.rst
-    COMMAND awk -f ${CMAKE_SOURCE_DIR}/literst.awk 
-      ${CMAKE_SOURCE_DIR}/examples/basic_rendering.cc 
+      COMMAND awk -f ${CMAKE_CURRENT_SOURCE_DIR}/literst.awk
+      ${CMAKE_CURRENT_SOURCE_DIR}/basic_rendering.cc 
       > ${CMAKE_BINARY_DIR}/_docs/example_basic_rendering.rst
-    COMMAND awk -f ${CMAKE_SOURCE_DIR}/literst.awk 
-      ${CMAKE_SOURCE_DIR}/examples/skeletal_animation.cc 
+      COMMAND awk -f ${CMAKE_CURRENT_SOURCE_DIR}/literst.awk
+      ${CMAKE_CURRENT_SOURCE_DIR}/skeletal_animation.cc 
       > ${CMAKE_BINARY_DIR}/_docs/example_skeletal_animation.rst
-    COMMAND awk -f ${CMAKE_SOURCE_DIR}/literst.awk 
-      ${CMAKE_SOURCE_DIR}/examples/physics_instancing.cc 
+      COMMAND awk -f ${CMAKE_CURRENT_SOURCE_DIR}/literst.awk
+      ${CMAKE_CURRENT_SOURCE_DIR}/physics_instancing.cc 
       > ${CMAKE_BINARY_DIR}/_docs/example_physics_instancing.rst
     )
 add_custom_target(examples_literal_docs ALL DEPENDS 

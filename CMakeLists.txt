@@ -128,7 +128,7 @@ if(BUILD_DOCUMENTATION)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
     add_custom_command(TARGET doxygen_docs POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_SOURCE_DIR}/docs
+            ${CMAKE_CURRENT_SOURCE_DIR}/docs
             ${CMAKE_BINARY_DIR}/_docs)
 endif()
 
