@@ -41,7 +41,6 @@ namespace gdt {
             static log_recorder recorder;
             static severity level;
             static bool check_level(severity s);
-            static std::string ts();
     };
 
     class log_record {
