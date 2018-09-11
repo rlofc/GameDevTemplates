@@ -37,6 +37,7 @@ class backend {
     virtual bool is_button_pressed() const = 0;
     virtual void get_mouse(int *x, int *y) const = 0;
     gdt::screen & screen() { return _screen; }
+    const gdt::screen & c_screen() const { return _screen; }
     std::function<void(int w, int h)> on_resize_callback;
     std::function<void(int k)> on_key_callback;
 };
